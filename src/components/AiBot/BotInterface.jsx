@@ -2,32 +2,70 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatbotIcon from "../../assets/chatbot";
 import Message from "./Message";
 import { InitialPrompt } from "../../assets/chatbot";
-import { GoogleGenAI } from "@google/genai";
-import { GEMINI_TMDB_API_KEY } from "../../assets/key";
+import { FIREWORKS_KEY, FIREWORKS_MODEL } from "../../assets/key";
 import { MyBotContext } from "../Context/BotMessageContext";
 import { AuthContext } from "../Context/Auth";
 
-const ai = new GoogleGenAI({ apiKey: GEMINI_TMDB_API_KEY });
+// ===============================
+// Fireworks AI setup
+// ===============================
+const FIREWORKS_BASE = "https://api.fireworks.ai/inference/v1";
+
+async function getAIResponse(promptText) {
+  try {
+    const res = await fetch(`${FIREWORKS_BASE}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${FIREWORKS_KEY}`,
+      },
+      body: JSON.stringify({
+        model: FIREWORKS_MODEL,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are CineMate AI — a smart movie assistant that helps users find, rate, and discover films easily.",
+          },
+          {
+            role: "user",
+            content: `${InitialPrompt}\n${promptText}`,
+          },
+        ],
+        max_tokens: 400,
+        temperature: 0.7,
+      }),
+    });
+
+    const data = await res.json();
+    return data?.choices?.[0]?.message?.content || "No response from CineMate AI.";
+  } catch (err) {
+    console.error("🔥 Fireworks Error:", err);
+    return "Oops! I ran into a connection issue. Try again later.";
+  }
+}
 
 function BotInterface({ height = 700, setActive }) {
-  const {username} = useContext(AuthContext)
+  const { username } = useContext(AuthContext);
   const [message, setMessage] = useState("");
   const { messageHistory, setMessageHistory } = useContext(MyBotContext);
   const [isLoading, setIsLoading] = useState(false);
   const chatContainerRef = useRef(null);
 
+  // Initial welcome message
   useEffect(() => {
-    const obj = {
-      user: "Popcorn Pilot",
+    const intro = {
+      user: "CineMate AI",
       msg: {
         movieNames: [],
         message:
-          "Hey there! 🍿 I'm Popcorn Pilot, your movie navigator.\nAsk me anything about movies, from recommendations to details!\nJust a heads-up, even pilots hit turbulence sometimes, so bear with me if I encounter a few bumps along the way 😵‍💫\n🎬✨ What movie adventure are we embarking on today?",
+          "Hey there! 🎬 I'm CineMate — your friendly movie assistant. Ask me anything about films, actors, or get tailored recommendations!",
       },
     };
-    if (messageHistory.length === 0) setMessageHistory([obj]);
+    if (messageHistory.length === 0) setMessageHistory([intro]);
   }, []);
 
+  // Scroll chat automatically
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -35,49 +73,44 @@ function BotInterface({ height = 700, setActive }) {
     }
   }, [messageHistory]);
 
-  // Calling Gemini to get the bot running
+  // Fetch AI reply
   const fetchData = async (userPrompt) => {
     setIsLoading(true);
     try {
-      const result = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: InitialPrompt + userPrompt,
-      });
-
-      const responseJson = JSON.parse(
-        result.text.replace(/```json|```/g, "").trim()
-      );
+      const aiReply = await getAIResponse(userPrompt);
 
       setMessageHistory((prev) => [
         ...prev,
         {
-          user: "Popcorn Pilot",
+          user: "CineMate AI",
           msg: {
-            movieNames: responseJson.movieNames || [],
-            message: responseJson.message || "I couldn't understand that!",
+            movieNames: [],
+            message: aiReply,
           },
         },
       ]);
     } catch (error) {
+      console.error("Error:", error);
       setMessageHistory((prev) => [
         ...prev,
         {
-          user: "Popcorn Pilot",
+          user: "CineMate AI",
           msg: {
             movieNames: [],
-            message: "Oops! Something went wrong. Try again later.",
+            message: "Sorry, something went wrong. Please try again later.",
           },
         },
       ]);
-      console.log("Error: ", error);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Send message
   const sendMessage = () => {
     if (message.trim() === "" || isLoading) return;
-    const newMessage = { user: username, msg: { movieNames: [], message } };
+
+    const newMessage = { user: username || "You", msg: { movieNames: [], message } };
     setMessageHistory((prev) => [...prev, newMessage]);
     fetchData(message);
     setMessage("");
@@ -97,6 +130,7 @@ function BotInterface({ height = 700, setActive }) {
         backgroundPosition: "center",
       }}
     >
+      {/* Header */}
       <div className="flex justify-between">
         <div className="flex justify-center items-center p-1 h-15 w-15">
           <ChatbotIcon />
@@ -118,6 +152,7 @@ function BotInterface({ height = 700, setActive }) {
         </div>
       </div>
 
+      {/* Chat Area */}
       <div
         className="relative rounded-xl overflow-hidden"
         style={{ height: `calc(${height}px - 100px)` }}
@@ -130,6 +165,7 @@ function BotInterface({ height = 700, setActive }) {
           {messageHistory.map((msg, index) => (
             <Message key={index} msgObj={msg} />
           ))}
+
           {isLoading && (
             <div className="flex justify-start my-2">
               <div className="bg-white p-3 rounded-lg max-w-xs">
@@ -150,6 +186,7 @@ function BotInterface({ height = 700, setActive }) {
         </div>
       </div>
 
+      {/* Input Area */}
       <div className="flex items-center mt-3 border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 bg-white">
         <input
           type="text"
