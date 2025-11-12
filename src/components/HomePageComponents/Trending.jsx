@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import HorizontalView from "../commonComponents/HorizontalView";
 import { MiniLoader } from "../commonComponents/CircularLoader";
 
@@ -12,7 +12,7 @@ function Trending() {
     setIsLoading(true);
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`
       )
       .then((response) => {
         setMovies(response.data.results);

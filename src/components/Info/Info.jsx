@@ -8,7 +8,7 @@ import Recomendation from "./Recomendation";
 import { MyContext } from "../Context/WatchListContext";
 import { MySwitchContext } from "../Context/MovieTVcontext";
 import axios from "axios";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import { getFunDesc } from "./prompt";
 import InfoLoading from "./InfoLoading";
 import { FullScreenLoader } from "../commonComponents/CircularLoader";
@@ -42,7 +42,7 @@ function Info() {
 
         // Fetch movie details
         const movieResponse = await axios.get(
-          `https://api.themoviedb.org/3/${switchmov}/${movID}?api_key=${API_KEY}&language=en-US`
+          `https://api.themoviedb.org/3/${switchmov}/${movID}?api_key=${TMDB_API_KEY}&language=en-US`
         );
         setFunDesc(
           getFunDesc({
@@ -55,7 +55,7 @@ function Info() {
 
         // Fetch trailer
         const videosResponse = await axios.get(
-          `https://api.themoviedb.org/3/${switchmov}/${movID}/videos?api_key=${API_KEY}`
+          `https://api.themoviedb.org/3/${switchmov}/${movID}/videos?api_key=${TMDB_API_KEY}`
         );
 
         if (

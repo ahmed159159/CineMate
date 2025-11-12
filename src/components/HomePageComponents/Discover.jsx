@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import Pagination from "../commonComponents/Pagination";
 import MovieCard from "../commonComponents/MovieCard";
 import { MiniLoader } from "../commonComponents/CircularLoader";
@@ -38,7 +38,7 @@ function Discover() {
     setLoading(true);
     axios
       .get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&include_adult=${adult}&language=en-US&page=${pageNo}&sort_by=${selectedSorting}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&include_adult=${adult}&language=en-US&page=${pageNo}&sort_by=${selectedSorting}`
       )
       .then((response) => {
         setMovies(response.data.results);

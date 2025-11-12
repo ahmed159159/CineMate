@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import HorizontalView from "../commonComponents/HorizontalView";
 import axios from "axios";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import { MiniLoader } from "../commonComponents/CircularLoader";
 
 function Upcoming() {
@@ -12,7 +12,7 @@ function Upcoming() {
     setIsLoading(true);
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=2`
+        `https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=2`
       )
       .then((response) => {
         setMovies(response.data.results);

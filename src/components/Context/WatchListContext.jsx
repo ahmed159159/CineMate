@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createClient } from "";
+import { createClient } from "@supabase/supabase-js";
 import { AuthContext } from "./Auth";
 
 const supabaseUrl = import.meta.env.VITE_PROJ_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
+const supabaseKey = import.meta.env.VITE_SUPABASE_TMDB_API_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const MyContext = createContext();

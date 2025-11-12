@@ -1,36 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatbotIcon from "../../assets/chatbot";
 import Message from "./Message";
-
-const FIREWORKS_BASE = "https://api.fireworks.ai/inference/v1";
-
-async function fireworksChat({ system, user }) {
-  const res = await fetch(`${FIREWORKS_BASE}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${FIREWORKS_KEY}`
-    },
-    body: JSON.stringify({
-      model: FIREWORKS_MODEL,
-      messages: [
-        { role: "system", content: system },
-        { role: "user", content: user }
-      ],
-      temperature: 0.7,
-      max_tokens: 512
-    })
-  });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || "";
-}
-
 import { InitialPrompt } from "../../assets/chatbot";
-import { FIREWORKS_KEY, FIREWORKS_MODEL } from "../../assets/key";
+import { GoogleGenAI } from "@google/genai";
+import { GEMINI_TMDB_API_KEY } from "../../assets/key";
 import { MyBotContext } from "../Context/BotMessageContext";
 import { AuthContext } from "../Context/Auth";
 
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: GEMINI_TMDB_API_KEY });
 
 function BotInterface({ height = 700, setActive }) {
   const {username} = useContext(AuthContext)
@@ -62,14 +39,16 @@ function BotInterface({ height = 700, setActive }) {
   const fetchData = async (userPrompt) => {
     setIsLoading(true);
     try {
-      const raw = await fireworksChat({ system: InitialPrompt, user: userPrompt });
-    let responseJson;
-    try {
-      responseJson = JSON.parse(raw.replace(/```json|```/g, "").trim());
-    } catch (e) {
-      responseJson = { movieNames: [], message: raw };
-    }
-    setMessageHistory((prev) => [...prev, { user: "CineMate 🎬", msg: responseJson }]);((prev) => [
+      const result = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: InitialPrompt + userPrompt,
+      });
+
+      const responseJson = JSON.parse(
+        result.text.replace(/```json|```/g, "").trim()
+      );
+
+      setMessageHistory((prev) => [
         ...prev,
         {
           user: "Popcorn Pilot",

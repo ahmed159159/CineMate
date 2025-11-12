@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import BannerSlider from "./BannerSlider";
 import { FullScreenLoader } from "../commonComponents/CircularLoader";
 import { useLoadingProgress } from "../../hooks/useLoadingProgress";
@@ -18,7 +18,7 @@ function Banner() {
     setIsLoading(true);
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`
       )
       .then((response) => {
         let movies = response.data.results;

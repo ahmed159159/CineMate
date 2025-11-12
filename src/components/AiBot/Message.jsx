@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import MovieCardLite from "./MovieCardLite";
 
 function Message({ msgObj }) {
@@ -19,7 +19,7 @@ function Message({ msgObj }) {
         try {
           const moviePromises = msgObj.msg.movieNames.map(name =>
             axios.get(
-              `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(name)}&include_adult=false&language=en-US&page=1`,
+              `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(name)}&include_adult=false&language=en-US&page=1`,
               { signal: controller.signal }
             )
           );

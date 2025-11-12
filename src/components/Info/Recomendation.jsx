@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 import VerticalView from "../commonComponents/VerticalView";
 import Pagination from "../commonComponents/Pagination";
 import { MySwitchContext } from "../Context/MovieTVcontext";
@@ -15,7 +15,7 @@ function Recomendation() {
     let movID = new URLSearchParams(location.search).get("id");
     axios
       .get(
-        `https://api.themoviedb.org/3/${switchmov}/${movID}/recommendations?api_key=${API_KEY}&language=en-US&page=${pageNo}`
+        `https://api.themoviedb.org/3/${switchmov}/${movID}/recommendations?api_key=${TMDB_API_KEY}&language=en-US&page=${pageNo}`
       )
       .then((response) => {
         setMovies(response.data.results);

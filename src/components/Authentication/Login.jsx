@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createClient } from "";
+import { createClient } from "@supabase/supabase-js";
 import { AuthContext } from "../Context/Auth";
 import { MyContext } from "../Context/WatchListContext";
 
 const supabaseUrl = import.meta.env.VITE_PROJ_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_API_KEY;
+const supabaseKey = import.meta.env.VITE_SUPABASE_TMDB_API_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 

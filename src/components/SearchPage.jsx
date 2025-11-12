@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation} from "react-router-dom";
-import { API_KEY } from "../assets/key";
+import { TMDB_TMDB_API_KEY } from "../assets/key";
 import axios from "axios";
 import VerticalView from "./commonComponents/VerticalView";
 import Pagination from "./commonComponents/Pagination";
@@ -19,7 +19,7 @@ function SearchPage() {
     setOriginal(que);
     axios
       .get(
-        `https://api.themoviedb.org/3/search/${switchmov}?api_key=${API_KEY}&query=${que}&include_adult=false&language=en-US&page=${pageNo}'`
+        `https://api.themoviedb.org/3/search/${switchmov}?api_key=${TMDB_API_KEY}&query=${que}&include_adult=false&language=en-US&page=${pageNo}'`
       )
       .then((response) => {
         console.log(response.data.results)

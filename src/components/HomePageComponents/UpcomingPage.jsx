@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "../commonComponents/Pagination";
 import VerticalView from "../commonComponents/VerticalView";
-import { API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY } from "../../assets/key";
 
 
 function UpcomingPage() {
@@ -15,7 +15,7 @@ function UpcomingPage() {
   useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=en-US&page=${pageNo}`
+        `https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=${pageNo}`
       )
       .then((response) => {
         setMovies(response.data.results);
