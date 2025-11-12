@@ -9,7 +9,7 @@ import { MyContext } from "../Context/WatchListContext";
 import { MySwitchContext } from "../Context/MovieTVcontext";
 import axios from "axios";
 import { TMDB_TMDB_API_KEY } from "../../assets/key";
-import { getFunDesc } from "./prompt";
+import { getMoviePromptResponse  } from "./prompt";
 import InfoLoading from "./InfoLoading";
 import { FullScreenLoader } from "../commonComponents/CircularLoader";
 import { useLoadingProgress } from "../../hooks/useLoadingProgress";
