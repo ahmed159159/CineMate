@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Pagination from "../commonComponents/Pagination";
 import VerticalView from "../commonComponents/VerticalView";
-import { TMDB_TMDB_API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY as TMDB_API_KEY } from "../../assets/key";
 
 
 function UpcomingPage() {
