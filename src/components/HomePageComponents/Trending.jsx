@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { TMDB_TMDB_API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY as TMDB_API_KEY } from "../../assets/key";
 import HorizontalView from "../commonComponents/HorizontalView";
 import { MiniLoader } from "../commonComponents/CircularLoader";
 
