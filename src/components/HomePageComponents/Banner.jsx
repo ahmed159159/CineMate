@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { TMDB_TMDB_API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY as TMDB_API_KEY } from "../../assets/key";
 import BannerSlider from "./BannerSlider";
 import { FullScreenLoader } from "../commonComponents/CircularLoader";
 import { useLoadingProgress } from "../../hooks/useLoadingProgress";
