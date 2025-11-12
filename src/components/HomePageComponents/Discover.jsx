@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { TMDB_TMDB_API_KEY } from "../../assets/key";
+import { TMDB_TMDB_API_KEY as TMDB_API_KEY } from "../../assets/key";
 import Pagination from "../commonComponents/Pagination";
 import MovieCard from "../commonComponents/MovieCard";
 import { MiniLoader } from "../commonComponents/CircularLoader";
