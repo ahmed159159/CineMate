@@ -1,30 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 
-export const AuthContext = React.createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [username, setUsername] = useState("User");
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
+
+  // Load data from localStorage on mount
   useEffect(() => {
-    const x = localStorage.getItem("authenticated");
-    setUsername(localStorage.getItem("username"))
-    setEmail(localStorage.getItem("email"))
-    if (JSON.parse(x) === true) {
-      setAuthenticated(true);
+    try {
+      const savedAuth = localStorage.getItem("authenticated");
+      const savedUser = localStorage.getItem("username");
+      const savedEmail = localStorage.getItem("email");
+
+      if (savedAuth && JSON.parse(savedAuth) === true) {
+        setAuthenticated(true);
+      }
+
+      if (savedUser) setUsername(savedUser);
+      if (savedEmail) setEmail(savedEmail);
+    } catch (error) {
+      console.error("Failed to load user data:", error);
     }
   }, []);
-  
+
+  // Save changes to localStorage
   useEffect(() => {
-    localStorage.setItem("authenticated", JSON.stringify(authenticated));
-    localStorage.setItem("username", username);
-    localStorage.setItem("email", email);
+    try {
+      localStorage.setItem("authenticated", JSON.stringify(authenticated));
+      localStorage.setItem("username", username);
+      localStorage.setItem("email", email);
+    } catch (error) {
+      console.error("Failed to save user data:", error);
+    }
   }, [authenticated, username, email]);
-  
-  
+
   return (
     <AuthContext.Provider
-      value={{ authenticated, setAuthenticated, username, setUsername, email, setEmail }}
+      value={{
+        authenticated,
+        setAuthenticated,
+        username,
+        setUsername,
+        email,
+        setEmail,
+      }}
     >
       {children}
     </AuthContext.Provider>
